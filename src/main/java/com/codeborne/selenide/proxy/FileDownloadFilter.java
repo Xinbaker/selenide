@@ -85,7 +85,6 @@ public class FileDownloadFilter implements ResponseFilter {
     if (response.status().code() < 200 || response.status().code() >= 300) return;
 
     String fileName = getFileName(r);
-    if (fileName == null) return;
 
     File file = downloader.prepareTargetFile(config, fileName);
     try {
