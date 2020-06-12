@@ -55,6 +55,30 @@ class FileDownloadViaProxyTest extends IntegrationTest {
   }
 
   @Test
+  void downloadsFileWithCyrillicNameContainingQuotes() throws IOException {
+    File downloadedFile = $(byText("Download file with \"cyrillic\" name")).download();
+
+    assertThat(downloadedFile.getName())
+      .isEqualTo("файл-с-\"русским\"-названием.txt");
+    assertThat(readFileToString(downloadedFile, "UTF-8"))
+      .isEqualTo("Превед медвед!");
+    assertThat(downloadedFile.getAbsolutePath())
+      .startsWith(folder.getAbsolutePath());
+  }
+
+  @Test
+  void downloadsFileWithCyrillicQuotesInName() throws IOException {
+    File downloadedFile = $(byText("Download file with cyrillic quotes in name")).download();
+
+    assertThat(downloadedFile.getName())
+      .isEqualTo("файл с «кавычками» в названии.txt");
+    assertThat(readFileToString(downloadedFile, "UTF-8"))
+      .isEqualTo("Превед медвед!");
+    assertThat(downloadedFile.getAbsolutePath())
+      .startsWith(folder.getAbsolutePath());
+  }
+
+  @Test
   void downloadExternalFile() throws FileNotFoundException {
     open("http://the-internet.herokuapp.com/download");
     File video = $(By.linkText("some-file.txt")).download();
